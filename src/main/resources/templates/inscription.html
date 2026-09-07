@@ -1,0 +1,13 @@
+<!doctype html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Inscription</title><link rel="stylesheet" href="/css/app.css"></head>
+<body><main class="center"><form class="card form" id="form"><h1>Créer un compte</h1>
+<label>Nom<input name="nom" required></label><label>Email<input type="email" name="email" required></label><label>Mot de passe<input type="password" name="motDePasse" minlength="8" required></label>
+<label>Rôle<select name="role" id="role"><option value="DONNEUR">Donneur</option><option value="ETABLISSEMENT">Établissement</option></select></label>
+<div id="donneur"><label>Groupe sanguin<select name="groupeSanguin"><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label></div>
+<label>Ville<input name="ville"></label><label>Téléphone<input name="telephone"></label>
+<div id="etablissement" style="display:none"><label>Nom établissement<input name="nomEtablissement"></label><label>Type<select name="typeEtablissement"><option>HOPITAL</option><option>BANQUE_DE_SANG</option></select></label><label>Adresse<input name="adresse"></label></div>
+<button class="btn">S'inscrire</button><p id="msg"></p><p><a href="/login">Retour connexion</a></p></form></main>
+<script>
+const role=document.querySelector('#role'), d=document.querySelector('#donneur'), e=document.querySelector('#etablissement');
+role.onchange=()=>{d.style.display=role.value==='DONNEUR'?'block':'none';e.style.display=role.value==='ETABLISSEMENT'?'block':'none';};
+document.querySelector('#form').onsubmit=async ev=>{ev.preventDefault();let o=Object.fromEntries(new FormData(ev.target));let r=await fetch('/api/auth/inscription',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)});let j=await r.json();document.querySelector('#msg').textContent=j.message||'Inscription effectuée';if(r.ok)setTimeout(()=>location.href='/verification?email='+encodeURIComponent(o.email),700);};
+</script></body></html>
